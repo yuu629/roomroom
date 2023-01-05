@@ -1,0 +1,88 @@
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            
+            <!-- 左パネル -->
+            <div class="column is-one-third">
+                <div class="columns is-multiline">
+                    
+                    <div class="col-md-3">
+                        <%= render 'room_menu' %>
+                    </div>
+                <br/>
+                </div>
+            </div>
+
+            <!-- 右側 -->
+            <div class="column">
+                <div class="columns is-multiline">
+                    
+                    <article class="panel">
+                        <div class="panel-heading">
+                             お部屋の概要
+                        </div>
+                       
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="media">
+                                    <%= form_for @room do |f| %>
+         
+                                        <div class="col-md-4 select">
+                                            <div class="form-group">
+                                                <label>お家のタイプ</label>
+                                                <%= f.select :home_type, [["マンション", "マンション"], ["アパート", "アパート"], ["一戸建て", "一戸建て"]],
+                                                        id: "home_type", prompt: "選択してください", class: "form-control" %>
+                                            </div>
+                                        </div>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="col-md-4 select">
+                                            <div class="form-group">
+                                                <label>お部屋のタイプ</label>
+                                                <%= f.select :room_type, [ ["プライベート", "プライベート"], ["シェア", "シェア"]],
+                                                    id: "room_type", prompt: "選択してください", class: "form-control" %>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <div class="col-md-4 select">
+                                            <div class="form-group">
+                                                <label>宿泊可能人数</label>
+                                                <%= f.select :accommodate, [["２人", 2], ["３人", 3], ["４人以上可能", 4]],
+                                                    id: "accommodate", prompt: "選択してください", class: "form-control" %>
+                                            </div>
+                                        </div>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="col-md-4 select">
+                                            <div class="form-group">
+                                                <label>ベッド数</label>
+                                                <%= f.select :bed_room, [["1台", 1], ["2台", 2], ["3台", 3], ["4台以上", 4]],
+                                                    id: "bed_room", prompt: "選択してください", class: "form-control" %>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <div class="col-md-4 select">
+                                            <div class="form-group">
+                                                <label>部屋数</label>
+                                                <%= f.select :bath_room, [["1部屋", 1], ["2部屋", 2], ["3部屋", 3], ["4部屋以上", 4]],
+                                                    id: "bath_rooms", prompt: "選択してください", class: "form-control" %>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <div><%= f.submit "修正する", class: "button is-primary" %></div>
+                                    <% end %>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+         
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

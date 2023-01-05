@@ -1,0 +1,82 @@
+<section class="section">
+    <div class="container">
+        <div class="columns">
+
+            <!-- 左パネル -->
+            <div class="column is-one-third">
+                <div class="columns is-multiline">
+                    
+                    <div class="col-md-3">
+                        <%= render 'room_menu' %>
+                    </div>
+                <br/>
+                </div>
+            </div>
+
+            <!-- 右側 -->
+            <div class="column">
+                <div class="columns is-multiline">
+                    
+                    <article class="panel">
+                        <div class="panel-heading">
+                             お写真
+                        </div>
+
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="media">
+                                <!--写真アップロードの記述 -->
+                                
+                                    <div class="field">
+                                        <label for="" class="label">お部屋の写真をアップロード</label>
+                                        <div class="control">
+                                            <div class="m-b-20">
+                                                <div class="dropzone" id="myDropzone"  style="height: 200px; width: 600px;" action="/rooms/<%= @room.id %>/upload_photo"></div>
+                                            </div>
+
+                                            <div class="columns is-multiline">
+                                                <% @room.photos.each do |photo| %>
+                                                    <div class="column is-one-fifth">
+                                                       <div class="card is-image">
+                                                            <div class="card-image">
+                                                                <%= link_to 'Remove', delete_photo_room_url(photo_id: photo.id, id: @room.id), 
+                                                                        method: :delete,
+                                                                        data: { confirm: "本当に削除してよろしいですか?" },
+                                                                        class: "delete delete-file is-pulled-right",
+                                                                        style: "z-index: 100"  %>
+
+                                                                <figure class="image is-4by3">
+                                                                    <%= image_tag url_for(photo) %>
+                                                                </figure>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                <% end %>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    Dropzone.options.myDropzone = {
+        paramName: "file",
+        maxFilesize: 2,
+        acceptedFiles: "image/*",
+        init: function() {
+            this.on('complete', function (file) {
+                location.reload();
+            })
+        }
+    }
+</script>

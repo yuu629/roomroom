@@ -1,0 +1,71 @@
+<section class="section">
+    <div class="container">
+        <p class="title">受注予約の一覧</p>
+        <br/>
+
+        <table class="table is-fullwidth" style="text-align: center;">
+            <thead>
+                <tr>
+                    <th>申し込み日</th>
+                    <th>ステータス</th>
+                    <th>お部屋</th>
+                    <th>ゲスト</th>
+                    <th></th>
+                    <th>料金</th>
+                    <th>アクション</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if @rooms.blank? %>
+                  <tr>
+                      <td colspan="7" class="has-text-centered"><h1>表示できる受注予約はありません。</h1></td>
+                  </tr>
+                <% end %>
+                <% @rooms.each do |room| %>
+                    <% room.reservations.each do |reservation| %>
+                        <tr>
+                            <td style="padding-top: 30px;"><%= I18n.l(reservation.created_at, format: :full_date) %></td>
+     
+                            <!-- ステータス -->
+                            <td style="padding-top: 30px;">
+                      
+                            </td>
+         
+                            <td>
+                                <%= link_to room_path(reservation.room), data: { turbolinks: false} do %>                                
+                                    <%= image_tag room_cover(reservation.room), class: "image is-64x64" %>
+                                    <%= reservation.room.listing_name %>
+                                <% end %>
+                            </td>
+    
+                            <td style="padding-top: 30px;">
+                                <%= link_to user_path(reservation.user), class: "tootip" do %>
+                                    <figure class="image is-48x48">
+                                        <%= image_tag avatar_url(reservation.user), class: "is-rounded" %>
+                                    </figure>
+                                    <%= reservation.user.full_name %>
+                                <% end %>
+                            </td>
+       
+                            <td style="padding-top: 30px;">
+                                宿泊日：<%= I18n.l(reservation.start_date, format: :full_date) %><br/>
+                                ご出発：<%= I18n.l(reservation.end_date, format: :full_date) %>
+                            </td>
+    
+                            <td style="padding-top: 30px;"><%= number_to_currency(reservation.total) %></td>
+   
+                            <!-- アクション -->
+                            <td style="padding-top: 30px;">
+                                <%= render partial: "reviews/host_form", locals: {reservation: reservation} %>
+                            </td>
+ 
+                        </tr>
+                        
+                    <% end %>
+                <% end %>
+            </tbody>
+      
+        </table>
+ 
+    </div>
+</section>

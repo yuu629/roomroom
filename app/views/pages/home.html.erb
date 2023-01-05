@@ -1,0 +1,117 @@
+<% content_for :head do %>
+  <meta name="turbolinks-cache-control" content="no-cache">
+<% end %>
+
+<section class="hero is-medium has-bg-img">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title has-text-white">
+                どんなお部屋をお探しですか？
+            </h1>
+            <%= form_tag search_path, method: :get, data: { turbolinks: false} do %> 
+                
+                <br/>
+                <br/>
+
+                <div class="field is-horizontal">
+                    <div class="field-body">
+
+                        <div class="control has-icons-left">
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-search"></i>
+                            </span>
+                            <%= text_field_tag :search, params[:search], placeholder: "どちらをお探し？", class: "input" %>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+                        <div class="field">
+                            <p class="control is-expanded has-icons-left">
+                                <%= text_field_tag :start_date, params[:start_date], placeholder: "チェックイン", readonly: true, class: "input is-primary is-rounded" %>
+                                <span class="icon is-small is-left">
+                                <i class="far fa-calendar-alt"></i>
+                                </span>
+                            </p>
+                        </div>
+                    
+                        <div class="field">
+                            <p class="control is-expanded has-icons-left has-icons-right">
+                                <%= text_field_tag :end_date, params[:end_date], placeholder: "チェックアウト", readonly: true, class: "input is-primary is-rounded" %>
+                                <span class="icon is-small is-left">
+                                <i class="far fa-calendar-alt"></i>
+                                </span>
+                            </p>
+                        </div>
+
+                        <%= submit_tag "検索", class: "button is-primary" %>
+                    </div>
+                </div>
+
+            <% end %>
+
+        </div>
+    </div>
+</section>
+
+<div class="box">
+    <article class="media">
+        <div class="column">
+
+            <div class="columns is-multiline">
+                <!-- 登録されたお部屋 -->
+
+                <% @rooms.each do |room| %>
+                    <% if room.active? %>
+                        <div class="column is-one-third">
+                            <div class="card">
+                                <div class="card-image">
+                                    <%= link_to listing_room_path(room) do %>
+                                        <figure class="image is-4by3">
+                                            <%= image_tag room_cover(room) %>
+                                        </figure>
+                                    <% end %>
+                                </div>
+                                <br/>
+                                <div class="card-content p-t-5 p-b-5">
+                                    <p class="subtitle is-6 m-b-5"><%= link_to room.listing_name, room_path(room), data: { turbolinks: false} %></p>
+                                    <p class="subtitle is-6 m-b-5"><%= room.address %></p>
+                                    <!--レビュー -->
+                                    <span class="star-review"><i class="fa fa-star"></i>
+                                        <%= room.average_rating %>
+                                        <span class="has-text-primary">(<%= room.reviews.count %>)</span>
+                                    </span>
+                                </div>
+
+                                <footer class="card-footer">
+                                    <a class="has-text-danger is-block card-footer-item has-text-right">
+                                        <span class="small-title">１泊の宿泊価格</span> 
+                                        <strong><%= number_to_currency(room.price) %></strong>                                            
+                                    </a>
+                                </footer>
+                            </div>
+                        </div>
+                    <% end %>
+                <% end %>
+            </div>
+        </div>
+    </article>
+</div>
+
+<script>
+  $('#start_date').datepicker({
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    maxDate: '3m',
+    onSelect: function(selected) {
+      $('#end_date').datepicker("option", "minDate", selected);
+      $('#end_date').attr("disabled", false);
+    }
+  });
+  $('#end_date').datepicker({
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    maxDate: '3m',
+    onSelect: function(selected) {
+      $('#start_date').datepicker("option", "maxDate", selected);
+    }
+  });
+</script>

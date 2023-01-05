@@ -1,0 +1,106 @@
+<section class="section">
+    <div class="container">
+        <div class="columns">
+        
+            <!-- 左側 -->
+            <div class="column is-one-third">
+                <div class="columns is-multiline">
+                    <!-- 上部 -->
+                    <div class="column is-full">
+                        <div class="card">
+                            <!--アバター -->
+                            <div class="card-content is-horizontal-center is-flex">
+                                <figure class="image is-256x256">
+                                    <%= image_tag avatar_url(current_user), class: "is-rounded" %>
+                                </figure>
+                            </div>
+                            
+                            <div class="card-content">
+                      
+                                <!-- アカウント -->
+                                <article class="media">
+                                    <div class="media-content">アカウント登録日</div>
+                                    <div class="media-right">
+                                        <strong><%= I18n.l(current_user.created_at, format: :full_date) %></strong>
+                                    </div>
+                                </article>
+                                <hr class="h-10">
+                                
+                                <!-- ステータス -->
+                                <article>
+                                    <div class="media">
+                                        <div class="media-right">
+                                            <% if current_user.status %> <strong style="color: green">オンライン</strong> <% else %> <strong style="color: red">オフライン</strong> <% end %>
+                                        </div>
+                                    </div>
+                                </article>
+                                <hr class="h-10">
+                                <br/>
+                                <!-- 自己紹介 -->
+                                <article>
+                                    <div class="media">
+                                        <div class="media-content">
+                                            <p>
+                                                <strong>自己紹介</strong>
+                                                <br/>
+                                                <br/>
+                                                <%= current_user.about %>
+                                            </p>
+                                        </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 右側 -->
+            <div class="column">
+                <div class="columns is-multiline">
+                    <!-- お部屋を登録する -->
+                    <div class="column is-one-third has-text-centered">
+                        <%= link_to new_room_path do %>
+                            <div class="card">
+                                <div class="card-image card-content is-horizontal-center is-flex ">
+                                    <figure class="image is-256x256 ">
+                                        <%= image_tag 'icon_add.png' %>
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <strong>お部屋を新規登録する</strong>
+                                </div>    
+                            </div>
+                        <% end %>
+                    </div>
+                    <!-- 登録したお部屋 -->
+                    <% current_user.rooms.each do |room| %>
+                        <% if room.active? %>
+                            <div class="column is-one-third">
+                                <div class="card">
+                                    <div class="card-image">
+                                        <%= link_to listing_room_path(room) do %>
+                                            <figure class="image is-4by3">
+                                                <%= image_tag room_cover(room) %>
+                                            </figure>
+                                        <% end %>
+                                    </div>
+                                    <br/>
+                                    <div class="card-content p-t-5 p-b-5">
+                                        <p class="subtitle is-6 m-b-5"><%= link_to room.listing_name, room_path(room), data: { turbolinks: false} %></p>
+                                        <p class="subtitle is-6 m-b-5"><%= room.address %></p>
+                                        <!--レビュー -->
+                                    </div>
+                                    <footer class="card-footer">
+                                        <a class="has-text-danger is-block card-footer-item has-text-right">
+                                            <span class="small-title">１泊の宿泊価格</span> 
+                                            <strong><%= number_to_currency(room.price) %></strong>                                            
+                                        </a>
+                                    </footer>
+                                </div>
+                            </div>
+                        <% end %>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

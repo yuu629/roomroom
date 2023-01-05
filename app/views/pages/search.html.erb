@@ -1,0 +1,202 @@
+<div id="main">
+  <div id="left">
+    <!-- 検索パネル -->
+
+  <section class="section">
+    <div class="container">
+
+      <div id="collapsePanel">
+          <%= search_form_for @search do |f| %>
+                
+                <div class="row">
+                    <div class="col-md-8">
+                        <label>宿泊日</label>
+                    </div>
+
+                    <div class="field has-addons">
+                        <p class="control">
+                            <%= text_field_tag :start_date, params[:start_date], readonly: true, placeholder: "チェックイン日", class: "input" %>
+                        </p>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <p class="control">
+                            <%= text_field_tag :end_date, params[:end_date], readonly: true, placeholder: "チェックアウト日", class: "input" %>
+                        </p>
+
+                    </div>
+                </div>
+                <br/>
+                <br/>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <label>宿泊費（円）</label>
+                    </div>
+
+                    <div class="field has-addons">
+                        <p class="control">
+                            <%= f.text_field :price_gteq, placeholder: "最低価格", class: "input" %>
+                        </p>
+                        <p class="control">
+                            <a class="button is-static">
+                            円
+                            </a>
+                        </p>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <p class="control">
+                            <%= f.text_field :price_lteq, placeholder: "最高価格", class: "input" %>
+                        </p>
+                        <p class="control">
+                            <a class="button is-static">
+                            円
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+
+                <div class="row">
+                    <div class="checkbox">
+                        <%= check_box_tag "q[room_type_eq_any][]", "プライベート", class: "checkbox" %> プライベート
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="checkbox">
+                        <%= check_box_tag "q[room_type_eq_any][]", "シェア", class: "checkbox" %> シェア
+                    </div>
+                </div>
+                <br/>
+                <br/>
+
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div class="field">
+                        <div class="control">
+                        <label>宿泊人数　</label>
+                            <div class="select">
+                                <%= f.select :accommodate_gteq, [["1人", 1], ["2人", 2], ["3人", 3], ["4人以上", 4]], id: "accommodate", prompt: "選択してください", class: "select" %>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="field">
+                        <div class="control">
+                        <label>ベッド数　</label>
+                            <div class="select">
+                                <%= f.select :bed_room_gteq, [["1台", 1], ["2台", 2], ["3台", 3], ["4台以上", 4]], id: "bed_room", prompt: "選択してください", class: "select" %>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="field">
+                        <div class="control">
+                        <label>部屋数</label>
+                            <div class="select">
+                                <%= f.select :bath_room_gteq, [["1部屋", 1], ["2部屋", 2], ["3部屋", 3], ["4部屋以上", 4]], id: "bath_rooms", prompt: "選択してください", class: "select" %>
+                            </div>
+                        </div>
+                        </div>
+
+                    </div>
+                </div>
+                <br/>
+                <br/>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <%= check_box_tag "q[is_tv_eq]", true, class: "checkbox" %> テレビ
+                    </div>
+                    <div class="col-md-4">
+                        <%= check_box_tag "q[is_kitchen_eq]", true, class: "checkbox" %> キッチン
+                    </div>
+                    <div class="col-md-4">
+                        <%= check_box_tag "q[is_Internet_eq]", true, class: "checkbox" %> インターネット
+                    </div>
+                    <div class="col-md-4">
+                        <%= check_box_tag "q[is_heating_eq]", true, class: "checkbox" %> 暖房
+                    </div>
+                    <div class="col-md-4">
+                        <%= check_box_tag "q[is_air_eq]", true, class: "checkbox" %> エアコン
+                    </div>
+                </div>
+                <br/>
+                <br/>
+
+                <div class="row text-center">
+                    <%= f.submit "検索", class: "button is-danger" %>
+                </div>
+            <% end %>
+        </div>
+
+    </div>
+</section>
+
+<!-- お部屋 -->
+<div class="row" id="room_listing">
+    <%= render partial: "rooms/rooms_list", locals: {rooms: @arrRooms} %>
+</div>
+ 
+ <div id="right">
+<!-- GOOGLEマップ -->
+    <div id="map" style="width: 100%; height: 100%"></div>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+        function initialize(rooms) {
+            var location = {lat: 43.061771, lng: 141.354451}
+            if (rooms.length > 0) {
+            location = {lat: rooms[0].latitude, lng: rooms[0].longitude}
+            }
+            var map = new google.maps.Map(document.getElementById('map'), {
+            center: location,
+            zoom: 12
+            });
+            var marker, inforwindow;
+            rooms.forEach(function(room) {
+            marker = new google.maps.Marker({
+                position: {lat: room.latitude, lng: room.longitude},
+                map: map
+            });
+            inforwindow = new google.maps.InfoWindow({
+                content: "<div class='map_price'>" + room.price + "円</div>"
+            });
+            inforwindow.open(map, marker);
+            })
+        }
+        google.maps.event.addDomListener(window, 'load', function() {
+            initialize(<%= raw @arrRooms.to_json %>)
+        });
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=ご自分のAPIキーをここに記述してください&callback=initMap" type="text/javascript"></script>
+    </div>
+</div>
+
+<script>
+  $('#start_date').datepicker({
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    maxDate: '3m',
+    onSelect: function(selected) {
+      $('#end_date').datepicker("option", "minDate", selected);
+      $('#end_date').attr("disabled", false);
+    }
+  });
+  $('#end_date').datepicker({
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    maxDate: '3m',
+    onSelect: function(selected) {
+      $('#start_date').datepicker("option", "maxDate", selected);
+    }
+  });
+  var open = true;
+  
+  $('#filter').click(function() {
+    if (open) {
+      $('#filter').html("More filters <i class='fa fa-chevron-up'></i>")
+    } else {
+      $('#filter').html("More filters <i class='fa fa-chevron-down'></i>")
+    }
+    open = !open;
+  });
+</script>

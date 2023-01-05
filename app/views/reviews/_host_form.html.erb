@@ -1,0 +1,37 @@
+<a class="button is-small is-outlined is-danger toggle-modal" aria-control="<%= reservation.id %>">レビュー</a>
+<div class="modal" id="<%= reservation.id %>">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+        <div class="box">
+            <%= form_for HostReview.new do |f| %>
+                <%= f.hidden_field :reservation_id, value: reservation.id %>
+                <div class="field">
+                    <div id="star_<%= reservation.id %>"></div>
+                </div>
+                <div class="field">
+                    <%= f.text_area :review, class: "textarea" %>
+                </div>
+                <%= f.hidden_field :room_id, value: reservation.room.id %>
+                <%= f.hidden_field :reservation_id, value: reservation.id %>
+                <%= f.hidden_field :guest_id, value: reservation.user.id %>
+                <a class="toggle-modal button is-light" aria-control="<%= reservation.id %>">キャンセル</a>
+                <%= f.submit "レビューする", class: "button is-danger" %>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.toggle-modal').on('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        var reservation_id = e.target.getAttribute('aria-control');
+        $('#star_' + reservation_id).raty({
+            path: '/assets/raty-js/lib/images',
+            scoreName: 'host_review[stars]',
+            score: 1
+        });
+        $('#star_' + reservation_id).raty('reload');
+        $('#' + reservation_id).toggleClass('is-active');
+    });
+</script>

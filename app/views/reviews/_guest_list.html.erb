@@ -1,0 +1,31 @@
+<% @guest_reviews.each do |r| %>
+    <article class="media">
+        <figure class="media-left">
+            <p class="image is-64x64">
+                <%= image_tag avatar_url(r.guest), class: "is-rounded" %>
+            </p>
+        </figure>
+        <div class="media-content">
+            <div class="content">
+                <p>
+                    <strong><%= r.guest.full_name %></strong><br>
+                    <%= r.review %>
+                </p>
+                <small><%= time_ago_in_words(r.created_at) %></small>
+            
+            </div>
+
+        </div>
+        <div class="media-right">
+            <span class="star-review"><i class="fa fa-star"></i> <%= r.stars %></span>
+        </div>
+        <% if current_user && current_user == r.guest %>
+            <div class="media-right">
+                <%= link_to r, method: :delete, data: {confirm: "レビューを削除してよろしいですか？"} do %>
+                    <i class="fas fa-trash-alt"></i>
+                <% end %>
+            </div>
+        <% end %>
+
+    </article>
+<% end %>
