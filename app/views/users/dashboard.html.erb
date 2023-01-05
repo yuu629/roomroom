@@ -1,0 +1,158 @@
+<section class="section">
+    <div class="container">
+        <div class="columns">
+        
+            <!-- 左パネル -->
+            <div class="column is-one-third">
+                <div class="columns is-multiline">
+
+                    <!-- 上部 -->
+                    <div class="column is-full">
+                        <div class="card">
+
+                            <!-- アバター -->
+                            <div class="card-content is-horizontal-center is-flex">
+                                <figure class="image is-256x256">
+                                    <%= image_tag avatar_url(current_user), class: "is-rounded" %>
+                                </figure>
+                            </div>
+                            
+                            <div class="card-content">
+                                <!-- 画像アップロードボタン -->
+                                <div class="content has-text-centered">
+                                    <p class="title is-5">
+                                        <%= current_user.full_name %>
+                                    </p>
+                                    <%= form_for :user, url: users_edit_url(@user), action: :update, method: :post do |f| %>
+                                        <div class="file">
+                                            <label class="button is-primary is-outlined is-fullwidth">
+                                                <%= f.file_field :avatar, class: "file-input", onchange: "this.form.submit();" %>
+                                                <i class="fas fa-upload"></i>&nbsp;&nbsp;&nbsp; アバター画像アップロード
+                                            </label>
+                                        </div>
+                                    <% end %>                                       
+                                </div>
+                                <hr class="h-10">
+                                
+                                <!-- アカウント情報 -->
+                                <article class="media">
+                                    <div class="media-content">アカウント登録日</div>
+                                    <div class="media-right">
+                                        <strong><%= I18n.l(current_user.created_at, format: :full_date) %></strong>
+                                    </div>
+                                </article>
+                                <hr class="h-10">
+                                
+                                <!-- オンラインステータス -->
+                                <article>
+                                    <div class="media">
+                                        <div class="media-content">ステータス</div>
+                                        <div class="media-right">
+                                            <strong><% if current_user.status %> オンライン <% else %> オフライン <% end %></strong> <i class="toggle far fa-edit" aria-controls="user-status"></i>
+                                        </div>
+                                    </div>
+                                    <div class="content">
+                                        <%= form_for :user, url: users_edit_url(@user), action: :update, method: :post, html: {id: 'user-status', class: 'is-hidden'} do |f| %>
+                                            <div class="field">
+                                                <%= f.select(:status, options_for_select([["オンライン", true], ["オフライン", false]]), {}, {class: "select is-fullwidth"}) %>
+                                            </div>
+                                            <a class="toggle button is-light" aria-controls="user-status">キャンセル</a>
+                                            <%= f.submit "保存", class: "button is-danger" %>
+                                        <% end %>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <!-- 下部 -->
+                    <div class="column is-full">
+                        <div class="card">
+                            <div class="card-content">
+                                <!-- アカウント詳細 -->
+                                <article>
+                                    <div class="media">
+                                        <div class="media-content">
+                                            <p>
+                                                <strong>自己紹介</strong>
+                                                <br>
+                                                <%= current_user.about %>
+                                            </p>
+                                        </div>
+                                        <div class="media-right">
+                                            <i class="toggle far fa-edit" aria-controls="user-about"></i>
+                                        </div>
+                                    </div>
+                                    <div class="content">
+                                        <%= form_for :user, url: users_edit_url(@user), action: :update, method: :post, html: {id: 'user-about', class: 'is-hidden'} do |f| %>
+                                            <div class="field">
+                                                <%= f.text_area :about, autofocus: true, autocomplete: 'form', class: 'input'%>
+                                            </div>
+                                            <a class="toggle button is-light" aria-controls="user-about">キャンセル</a>
+                                            <%= f.submit "保存", class: "button is-danger" %>
+                                        <% end %>
+                                    </div>
+                                </article>
+                                <hr class="h-10">
+                              
+                           
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <!-- 右側 -->
+            <div class="column">
+                <div class="columns is-multiline">
+                
+                    <!-- お部屋を登録する -->
+                    <div class="column is-one-third has-text-centered">
+                        <%= link_to new_room_path do %>
+                            <div class="card">
+                                <div class="card-image card-content is-horizontal-center is-flex ">
+                                    <figure class="image is-256x256 ">
+                                        <%= image_tag 'icon_add.png' %>
+                                     </figure>
+                                </div>
+                                <div class="card-content">
+                                    <strong>お部屋を新規登録する</strong>
+                                </div>    
+                            </div>
+                        <% end %>
+                    </div>
+                    <!-- 登録したお部屋 -->
+                    <% current_user.rooms.each do |room| %>
+                        <% if room.active? %>
+                            <div class="column is-one-third">
+                                <div class="card">
+                                    <div class="card-image">
+                                        <%= link_to listing_room_path(room) do %>
+                                           <figure class="image is-4by3">
+                                               <%= image_tag room_cover(room) %>
+                                           </figure>
+                                       <% end %>
+                                   </div>
+                                   <br/>
+                                   <div class="card-content p-t-5 p-b-5">
+                                       <p class="subtitle is-6 m-b-5"><%= link_to room.listing_name, room_path(room), data: { turbolinks: false} %></p>
+                                       <p class="subtitle is-6 m-b-5"><%= room.address %></p>
+                                       <!--レビュー -->
+                                   </div>
+                                   <footer class="card-footer">
+                                       <a class="has-text-danger is-block card-footer-item has-text-right">
+                                           <span class="small-title">１泊の宿泊価格</span> 
+                                           <strong><%= number_to_currency(room.price) %></strong>                                            
+                                       </a>
+                                   </footer>
+                               </div>
+                           </div>
+                       <% end %>
+                   <% end %>
+                  
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>

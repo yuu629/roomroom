@@ -1,0 +1,53 @@
+<section class="section">
+    <div class="container">
+        <div class="columns">
+    
+            <!-- 左パネル -->
+            <div class="column is-one-third">
+                <div class="columns is-multiline">
+ 
+                    <div class="col-md-3">
+                        <%= render 'room_menu' %>
+                    </div>
+                <br/>
+                </div>
+            </div>
+ 
+            <!-- 右側 -->
+            <div class="column">
+                <div class="columns is-multiline">
+ 
+                    <article class="panel">
+                        <div class="panel-heading">
+                             １泊の宿泊価格
+                        </div>
+       
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="media">
+                                    <%= form_for @room do |f| %>
+       
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label>価格（円）</label>
+                                                <%= f.text_field :price, placeholder: "例： 5,000円",class: "input", required: true, id: "autoaddress" %>
+                                            </div>
+                                    
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <div class="text-center">
+                                            <%= f.submit "保存", class: "button is-primary" %>
+                                        </div>
+ 
+                                    <% end %>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+      
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Roommapp</title>
+    <title>Roomapp</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <!--　アイコン　Font Awesome　-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- 日付　デザイン-->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/trontastic/jquery-ui.css">
+    <!-- 日付の日本語化-->
+    <script src="https://rawgit.com/jquery/jquery-ui/master/ui/i18n/datepicker-ja.js"></script>  
   </head>
 
   <body>
+
+    <%= render  "shared/navbar" %>
+
+    <%= render 'shared/notification' %>
+
     <%= yield %>
   </body>
 </html>

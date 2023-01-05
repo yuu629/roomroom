@@ -1,0 +1,64 @@
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            
+            <!-- 左パネル -->
+            <div class="column is-one-third">
+                <div class="columns is-multiline">
+           
+                    <div class="col-md-3">
+                        <%= render 'room_menu' %>
+                    </div>
+                <br/>
+                </div>
+            </div>
+      
+            <!-- 右側 -->
+            <div class="column">
+                <div class="columns is-multiline">
+      
+                    <article class="panel">
+                        <div class="panel-heading">
+                             附属設備
+                        </div>
+  
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="media">
+                                    <%= form_for @room do |f| %>
+     
+                                        <div class="row form-group">
+                                            <div class="col-md-4">
+                                                <%= f.check_box :is_tv, class: "checkbox" %> テレビ
+                                            </div>
+                                            <div class="col-md-4">
+                                                <%= f.check_box :is_kitchen, class: "checkbox" %> キッチン
+                                            </div>
+                                            <div class="col-md-4">
+                                                <%= f.check_box :is_internet, class: "checkbox" %> インターネット
+                                            </div>
+                                            </div>
+                                            <div class="row form-group">
+                                            <div class="col-md-4">
+                                                <%= f.check_box :is_heating, class: "checkbox" %> 暖房
+                                            </div>
+                                            <div class="col-md-4">
+                                                <%= f.check_box :is_air, class: "checkbox" %> エアコン
+                                            </div>
+                                            </div>
+                                            <br/><br/>
+                                            <div class="text-center">
+                                            <%= f.submit "保存", class: "button is-primary" %>
+                                            </div>
+ 
+                                    <% end %>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+  
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
